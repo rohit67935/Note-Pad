@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="alert alert-success alert-dismissible fade show shadow-sm mt-3" role="alert">
+    🚀 <strong>Hello from Python running inside Docker!</strong> Mode: Production
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<div class="row mt-4">
+    <!-- Form Section -->
+    <div class="col-md-5 mb-4">
+        <div class="card shadow-sm border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Add New Entry</h5>
+            </div>
+            <div class="card-body">
+                <form action="/add" method="POST">
+                    <div class="mb-3">
+                        <label for="itemTitle" class="form-label fw-bold">Item Title</label>
+                        <input type="text" id="itemTitle" name="title" class="form-control" placeholder="Type something..." required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Item</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Items List Section with Edit & Delete Buttons -->
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title mb-0">Database Items</h5>
+            </div>
+            <div class="card-body">
+                {% if items %}
+                    <ul class="list-group">
+                        {% for item in items %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="fw-bold">{{ item.title }}</span>
+                                    <span class="badge bg-success rounded-pill ms-2">{{ item.status }}</span>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <!-- Edit Button -->
+                                    <a href="/edit/{{ item.id }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                    
+                                    <!-- Delete Button -->
+                                    <form action="/delete/{{ item.id }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="text-center py-3 text-muted">
+                        <p class="mb-0">No entries in database yet. Add one from the form!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
